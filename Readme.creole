@@ -4,15 +4,10 @@ Zoom is a simple bukkit plugin that allows you to zoom in and out when you left/
 ==What? Explain.
 This is best explained in a few images (note: this shows the max zoom level. There are others in between):
 
-{{https://dl.dropbox.com/u/12637402/zoom/flowers.png|No zoom}}
-{{https://dl.dropbox.com/u/12637402/zoom/flowers_zoom.png|Full zoom}}
-\\
-{{https://dl.dropbox.com/u/12637402/zoom/squid%20zoom.png|No zoom}}
-{{https://dl.dropbox.com/u/12637402/zoom/squid.png|Full zoom}}
-\\
+{{http://dev.bukkit.org/media/images/49/53/flowers.png|No zoom}} {{http://dev.bukkit.org/media/images/49/54/flowers_zoom.png|Full zoom}}  {{http://dev.bukkit.org/media/images/49/52/squid.png|No zoom}} {{http://dev.bukkit.org/media/images/49/51/squid_zoom.png|Full zoom}} 
 
-{{https://dl.dropbox.com/u/12637402/zoom/tree.png|No zoom}}
-{{https://dl.dropbox.com/u/12637402/zoom/tree%20zoom.png|Full zoom}}
+{{http://dev.bukkit.org/media/images/49/55/tree.png|No zoom}} {{http://dev.bukkit.org/media/images/49/56/tree_zoom.png|Full zoom}}
+
 
 ==Ok, cool, why do my players need it?
 Well, it is useful for you and your players to spy on each other, or shoot each other with arrows. It is a great addition to any pvp minecraft server.
