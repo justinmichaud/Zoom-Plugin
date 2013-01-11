@@ -94,6 +94,7 @@ public class Zoom extends JavaPlugin implements Listener{
 					if (timesClicked >= 4) {
 						playersZoomedIn.remove(e.getPlayer().getName());
 						removeZoom(e.getPlayer());
+						e.setCancelled(true);
 						return;
 					}
 					
