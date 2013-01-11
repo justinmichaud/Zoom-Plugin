@@ -44,14 +44,13 @@ public class Zoom extends JavaPlugin implements Listener{
     		telescope.setItemMeta(im);
 
     		ShapedRecipe tele = new ShapedRecipe(telescope);
-    		tele.shape(new String[] { "   ", "S  ", " SG" });
+    		tele.shape(new String[] { " SG", "S  ", "   " });
     		tele.setIngredient('G', Material.GLASS);
     		tele.setIngredient('S', Material.STICK);
     		getServer().addRecipe(tele);
 		
-		String configMagicItem = this.getConfig().getString("MagicItem");
-		ItemStack t = tele.getResult();
-		magicItem = t;
+		//String configMagicItem = this.getConfig().getString("MagicItem");
+		magicItem = telescope;
 		
 		String configLeftMouseButton = this.getConfig().getString("Mouse_Button");
 		if (configLeftMouseButton.contains("left")) leftMouseButton = true;
@@ -84,6 +83,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
 			if (e.getItem() == magicItem) {
+				getLogger().log(Level.INFO, "TheLog");
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					
