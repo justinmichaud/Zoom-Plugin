@@ -30,8 +30,22 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		this.getServer().getPluginManager().registerEvents(this, this);
 		
+		// init telescope --- comp500
+		ItemStack telescope = new ItemStack(374, 1);
+    		telescope.setData(new MaterialData(374, 0));
+    		ItemMeta im = telescope.getItemMeta();
+    		im.setDisplayName("Telescope");
+  		im.addEnchant(Enchantment.getById(34), 10, true);
+    		telescope.setItemMeta(im);
+
+    		ShapedRecipe tele = new ShapedRecipe(telescope);
+    		tele.shape(new String[] { "   ", "S  ", " SG" });
+    		tele.setIngredient('G', Material.GLASS_PANE);
+    		tele.setIngredient('s', Material.STICK);
+    		getServer().addRecipe(tele);
+		
 		String configMagicItem = this.getConfig().getString("MagicItem");
-		Material m = Material.getMaterial(configMagicItem);
+		Item t = tele.getItem();
 		if (m==null) {
 			getLogger().log(Level.INFO, "Could not find item " + configMagicItem + ". Using BOW instead.");
 			m = Material.BOW;
@@ -68,7 +82,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			if (e.getMaterial() == magicItem) {
+			if (e.getItemStack() == magicItem) {
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					
