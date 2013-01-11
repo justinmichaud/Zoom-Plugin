@@ -82,9 +82,9 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			getLogger().log(Level.INFO, "TheLog2");
+			//getLogger().log(Level.INFO, "TheLog2");
 			if (e.getItem().getType() == magicItem.getType()) {
-				getLogger().log(Level.INFO, "TheLog3");
+				//getLogger().log(Level.INFO, "TheLog3");
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					
@@ -110,7 +110,7 @@ public class Zoom extends JavaPlugin implements Listener{
 					playersZoomedIn.put(e.getPlayer().getName(), 1);
 					zoom1(e.getPlayer());
 				}
-				
+				e.setCancelled(true);
 			}
 		}	
 	}
