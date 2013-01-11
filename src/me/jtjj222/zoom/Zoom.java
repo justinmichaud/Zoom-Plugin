@@ -77,14 +77,13 @@ public class Zoom extends JavaPlugin implements Listener{
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		getLogger().log(Level.INFO, "TheLog1");
 		
 		Action airAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
 			getLogger().log(Level.INFO, "TheLog2");
-			if (e.getItem() == magicItem) {
+			if (e.getItem().getType() == magicItem.getType()) {
 				getLogger().log(Level.INFO, "TheLog3");
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
