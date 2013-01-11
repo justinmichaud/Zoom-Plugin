@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,13 +12,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Zoom extends JavaPlugin implements Listener{
  	
-	Material magicItem = Material.BOW;
+	ItemStack magicItem;
 	Boolean leftMouseButton;
 	
 	//Stores <playername,number of times they have clicked>
@@ -32,7 +37,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		// init telescope --- comp500
 		ItemStack telescope = new ItemStack(374, 1);
-    		telescope.setData(new MaterialData(374, 0));
+    		telescope.setData(new MaterialData(374));
     		ItemMeta im = telescope.getItemMeta();
     		im.setDisplayName("Telescope");
   		im.addEnchant(Enchantment.getById(34), 10, true);
@@ -40,17 +45,13 @@ public class Zoom extends JavaPlugin implements Listener{
 
     		ShapedRecipe tele = new ShapedRecipe(telescope);
     		tele.shape(new String[] { "   ", "S  ", " SG" });
-    		tele.setIngredient('G', Material.GLASS_PANE);
-    		tele.setIngredient('s', Material.STICK);
+    		tele.setIngredient('G', Material.GLASS);
+    		tele.setIngredient('S', Material.STICK);
     		getServer().addRecipe(tele);
 		
 		String configMagicItem = this.getConfig().getString("MagicItem");
-		Item t = tele.getItem();
-		if (m==null) {
-			getLogger().log(Level.INFO, "Could not find item " + configMagicItem + ". Using BOW instead.");
-			m = Material.BOW;
-		}
-		magicItem = m;
+		ItemStack t = tele.getResult();
+		magicItem = t;
 		
 		String configLeftMouseButton = this.getConfig().getString("Mouse_Button");
 		if (configLeftMouseButton.contains("left")) leftMouseButton = true;
@@ -82,7 +83,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			if (e.getItemStack() == magicItem) {
+			if (e.getItem() == magicItem) {
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					
