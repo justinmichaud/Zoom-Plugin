@@ -37,8 +37,12 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		// init magic item --- comp500
 		String configMagicItem = this.getConfig().getString("MagicItem");
-		if (configMagicItem == "telescope"){
+		if (configMagicItem.equals("telescope")){
 			initTelescope();
+		} else {
+			Material mat = Material.getMaterial(configMagicItem.toUpperCase());
+			ItemStack stack = new ItemStack(mat, 1);
+			magicItem = stack;
 		}
 		String configLeftMouseButton = this.getConfig().getString("Mouse_Button");
 		if (configLeftMouseButton.contains("left")) leftMouseButton = true;
