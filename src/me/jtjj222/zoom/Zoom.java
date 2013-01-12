@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,13 +14,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Zoom extends JavaPlugin implements Listener{
  	
-	Material magicItem = Material.BOW;
+	ItemStack magicItem;
+	ItemStack telescope;
 	Boolean leftMouseButton;
 	
 	//Stores <playername,number of times they have clicked>
@@ -30,14 +38,15 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		this.getServer().getPluginManager().registerEvents(this, this);
 		
+		// init magic item --- comp500
 		String configMagicItem = this.getConfig().getString("MagicItem");
-		Material m = Material.getMaterial(configMagicItem);
-		if (m==null) {
-			getLogger().log(Level.INFO, "Could not find item " + configMagicItem + ". Using BOW instead.");
-			m = Material.BOW;
+		if (configMagicItem.equals("telescope")){
+			initTelescope();
+		} else {
+			Material mat = Material.getMaterial(configMagicItem.toUpperCase());
+			ItemStack stack = new ItemStack(mat, 1);
+			magicItem = stack;
 		}
-		magicItem = m;
-		
 		String configLeftMouseButton = this.getConfig().getString("Mouse_Button");
 		if (configLeftMouseButton.contains("left")) leftMouseButton = true;
 		else if (configLeftMouseButton.contains("right")) leftMouseButton = false;
@@ -66,12 +75,15 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		Action airAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
-		
+		if (e.getPlayer().hasPermission("Zoom.zoom")){
+			if (magicItem.equals(e.getItem())) {
+				if (magicItem == telescope) {
+					e.setCancelled(true);
+				}
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			if (e.getMaterial() == magicItem) {
-								
+			//making them have one of it could be done here
+				e.setCancelled(true);
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
-					
 					//They have used the command before
 					int timesClicked = playersZoomedIn.get(e.getPlayer().getName());
 					
@@ -94,9 +106,24 @@ public class Zoom extends JavaPlugin implements Listener{
 					playersZoomedIn.put(e.getPlayer().getName(), 1);
 					zoom1(e.getPlayer());
 				}
-				
 			}
-		}	
+		}	} else {e.getPlayer().sendMessage("You don't have permission!");}
+	}
+	
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+		if(cmd.getName().equalsIgnoreCase("givezoomer") || cmd.getName().equalsIgnoreCase("givezoom") || cmd.getName().equalsIgnoreCase("zoom") || cmd.getName().equalsIgnoreCase("zoomer") || cmd.getName().equalsIgnoreCase("zoomr")){ // If the player typed /basic then do the following...
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("[Zoom] This command can only be run by a player.");
+			} else {
+				Player player = (Player) sender;
+				if (player.hasPermission("Zoom.command")){
+				player.sendMessage("[Zoom] Giving you the zoomer...");
+				player.getInventory().addItem(magicItem);
+				} else {player.sendMessage("[Zoom] You don't have permission!");}
+			}
+			return true;
+		}
+		return false; 
 	}
 	
 	public void zoom1(Player p) {
@@ -121,5 +148,20 @@ public class Zoom extends JavaPlugin implements Listener{
 	
 	private void removeZoom(Player p) {
 		p.removePotionEffect(PotionEffectType.SLOW);		
+	}
+	private void initTelescope(){ // Telescope addon
+		telescope = new ItemStack(374, 1);
+		telescope.setData(new MaterialData(374));
+		ItemMeta im = telescope.getItemMeta();
+		im.setDisplayName("Telescope");
+		im.addEnchant(Enchantment.getById(34), 10, true);
+		telescope.setItemMeta(im);
+
+		ShapedRecipe tele = new ShapedRecipe(telescope);
+		tele.shape(new String[] { " SG", "S  ", "   " });
+		tele.setIngredient('G', Material.GLASS);
+		tele.setIngredient('S', Material.STICK);
+		getServer().addRecipe(tele);
+		magicItem = telescope;
 	}
 }
