@@ -158,7 +158,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		p.removePotionEffect(PotionEffectType.SLOW);		
 	}
 	private void initTelescope(){ // Telescope addon
-		ItemStack telescope = new ItemStack(374, 1);
+		telescope = new ItemStack(374, 1);
 		telescope.setData(new MaterialData(374));
 		ItemMeta im = telescope.getItemMeta();
 		im.setDisplayName("Telescope");
