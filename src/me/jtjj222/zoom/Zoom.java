@@ -25,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 public class Zoom extends JavaPlugin implements Listener{
  	
 	ItemStack magicItem;
+	ItemStack telescope;
 	Boolean leftMouseButton;
 	
 	//Stores <playername,number of times they have clicked>
@@ -76,8 +77,12 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		if (e.getPlayer().hasPermission("Zoom.zoom")){
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
+			if (e.getItem().getAmount() >= 2 && e.getItem().getItemMeta() == telescope.getItemMeta()) {
+				e.getPlayer().getInventory().removeItem(telescope);
+				e.getPlayer().getInventory().addItem(telescope);
+			}
 			if (magicItem.equals(e.getItem())) {
-								
+				
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					//They have used the command before
 					int timesClicked = playersZoomedIn.get(e.getPlayer().getName());
