@@ -77,7 +77,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		if (e.getPlayer().hasPermission("Zoom.zoom")){
 			if (magicItem.equals(e.getItem())) {
-				if (magicItem.equals(telescope)) {
+				if (magicItem == telescope) {
 					e.setCancelled(true);
 				}
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
