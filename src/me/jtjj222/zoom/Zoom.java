@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -103,6 +105,22 @@ public class Zoom extends JavaPlugin implements Listener{
 				e.setCancelled(true); //stop destroying of blocks
 			}
 		}	} else {e.getPlayer().sendMessage("You don't have permission!");}
+	}
+	
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+		if(cmd.getName().equalsIgnoreCase("givezoomer") || cmd.getName().equalsIgnoreCase("givezoom") || cmd.getName().equalsIgnoreCase("zoom") || cmd.getName().equalsIgnoreCase("zoomer") || cmd.getName().equalsIgnoreCase("zoomr")){ // If the player typed /basic then do the following...
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("[Zoom] This command can only be run by a player.");
+			} else {
+				Player player = (Player) sender;
+				if (player.hasPermission("Zoom.command")){
+				player.sendMessage("[Zoom] Giving you the zoomer...");
+				player.getInventory().addItem(magicItem);
+				} else {player.sendMessage("[Zoom] You don't have permission!");}
+			}
+			return true;
+		}
+		return false; 
 	}
 	
 	public void zoom1(Player p) {
