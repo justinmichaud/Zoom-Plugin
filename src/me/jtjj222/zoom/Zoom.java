@@ -76,9 +76,12 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action airAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		if (e.getPlayer().hasPermission("Zoom.zoom")){
+			if (magicItem.equals(e.getItem())) {
+				if (magicItem.equals(telescope)) {
+					e.setCancelled(true);
+				}
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
 			//making them have one of it could be done here
-			if (magicItem.equals(e.getItem())) {
 				e.setCancelled(true);
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					//They have used the command before
