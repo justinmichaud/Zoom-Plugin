@@ -8,12 +8,12 @@
 ####################################################
 # The item that you left or right click to zoom in #
 ####################################################
-MagicItem : BOW
+MagicItem : telescope
 
 ###################################################################################################
 # Use the left or right mouse button? If the plugin doesn't recognise the value, it assumes right #
 ###################################################################################################
-Mouse_Button : left
+Mouse_Button : right
 
 
 #########

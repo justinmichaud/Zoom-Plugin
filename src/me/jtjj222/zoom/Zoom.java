@@ -35,23 +35,11 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		this.getServer().getPluginManager().registerEvents(this, this);
 		
-		// init telescope --- comp500
-		ItemStack telescope = new ItemStack(374, 1);
-    		telescope.setData(new MaterialData(374));
-    		ItemMeta im = telescope.getItemMeta();
-    		im.setDisplayName("Telescope");
-  		im.addEnchant(Enchantment.getById(34), 10, true);
-    		telescope.setItemMeta(im);
-
-    		ShapedRecipe tele = new ShapedRecipe(telescope);
-    		tele.shape(new String[] { " SG", "S  ", "   " });
-    		tele.setIngredient('G', Material.GLASS);
-    		tele.setIngredient('S', Material.STICK);
-    		getServer().addRecipe(tele);
-		
-		//String configMagicItem = this.getConfig().getString("MagicItem");
-		magicItem = telescope;
-		
+		// init magic item --- comp500
+		String configMagicItem = this.getConfig().getString("MagicItem");
+		if (configMagicItem == "telescope"){
+			initTelescope();
+		}
 		String configLeftMouseButton = this.getConfig().getString("Mouse_Button");
 		if (configLeftMouseButton.contains("left")) leftMouseButton = true;
 		else if (configLeftMouseButton.contains("right")) leftMouseButton = false;
@@ -80,21 +68,17 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		Action airAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
-		
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			//getLogger().log(Level.INFO, "TheLog2");
 			if (magicItem.equals(e.getItem())) {
-				//getLogger().log(Level.INFO, "TheLog3");
 								
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
-					
 					//They have used the command before
 					int timesClicked = playersZoomedIn.get(e.getPlayer().getName());
 					
 					if (timesClicked >= 4) {
 						playersZoomedIn.remove(e.getPlayer().getName());
 						removeZoom(e.getPlayer());
-						e.setCancelled(true);
+						e.setCancelled(true); //stop destroying of blocks
 						return;
 					}
 					
@@ -111,7 +95,7 @@ public class Zoom extends JavaPlugin implements Listener{
 					playersZoomedIn.put(e.getPlayer().getName(), 1);
 					zoom1(e.getPlayer());
 				}
-				e.setCancelled(true);
+				e.setCancelled(true); //stop destroying of blocks
 			}
 		}	
 	}
@@ -138,5 +122,20 @@ public class Zoom extends JavaPlugin implements Listener{
 	
 	private void removeZoom(Player p) {
 		p.removePotionEffect(PotionEffectType.SLOW);		
+	}
+	private void initTelescope(){ // Telescope addon
+		ItemStack telescope = new ItemStack(374, 1);
+		telescope.setData(new MaterialData(374));
+		ItemMeta im = telescope.getItemMeta();
+		im.setDisplayName("Telescope");
+		im.addEnchant(Enchantment.getById(34), 10, true);
+		telescope.setItemMeta(im);
+
+		ShapedRecipe tele = new ShapedRecipe(telescope);
+		tele.shape(new String[] { " SG", "S  ", "   " });
+		tele.setIngredient('G', Material.GLASS);
+		tele.setIngredient('S', Material.STICK);
+		getServer().addRecipe(tele);
+		magicItem = telescope;
 	}
 }
