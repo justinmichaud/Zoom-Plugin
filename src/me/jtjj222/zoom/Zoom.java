@@ -72,6 +72,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		Action airAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
+		if (e.getPlayer().hasPermission("Zoom.zoom")){
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
 			if (magicItem.equals(e.getItem())) {
 								
@@ -101,7 +102,7 @@ public class Zoom extends JavaPlugin implements Listener{
 				}
 				e.setCancelled(true); //stop destroying of blocks
 			}
-		}	
+		}	} else {e.getPlayer().sendMessage("You don't have permission!");}
 	}
 	
 	public void zoom1(Player p) {

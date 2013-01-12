@@ -1,4 +1,24 @@
 name: Zoom
-version: 1.0
+version: 2.0
 main: me.jtjj222.zoom.Zoom
 author: jtjj222
+authors: [comp500]
+permissions:
+  Zoom.*:
+    description: Gives access to all Zoom commands
+    default: true
+    children:
+      Zoom.zoom: true
+      Zoom.command: true
+  Zoom.zoom:
+    description: Allows you to zoom in.
+    default: true
+  Zoom.command:
+    description: Allows you to spawn the zoomer with a command.
+    default: op
+commands:
+  givezoomer:
+    description: Give yourself the zoomer
+    aliases: [givezoom, zoom, zoomer, zoomr]
+    permission: Zoom.command
+    usage: Type /<command> to give yourself a zoomer (the item is configurable)
