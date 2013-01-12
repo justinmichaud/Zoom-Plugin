@@ -77,9 +77,15 @@ public class Zoom extends JavaPlugin implements Listener{
 		Action blockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		if (e.getPlayer().hasPermission("Zoom.zoom")){
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
-			if (e.getItem().getAmount() >= 2 && e.getItem().getItemMeta() == telescope.getItemMeta()) {
-				e.getPlayer().getInventory().removeItem(telescope);
+			if (e.getItem().getAmount() >= 2) {
+				ItemStack temptele = telescope;
+				temptele.setAmount(e.getItem().getAmount());
+				if (temptele.equals(e.getItem())) {
+				e.getPlayer().getInventory().removeItem(temptele);
 				e.getPlayer().getInventory().addItem(telescope);
+				}
+				temptele.setAmount(1);
+				temptele = null;
 			}
 			if (magicItem.equals(e.getItem())) {
 				
