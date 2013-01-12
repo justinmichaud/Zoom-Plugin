@@ -79,7 +79,7 @@ public class Zoom extends JavaPlugin implements Listener{
 		if (e.getAction() == airAction || e.getAction() == blockAction) {
 			//making them have one of it could be done here
 			if (magicItem.equals(e.getItem())) {
-				
+				e.setCancelled(true);
 				if (playersZoomedIn.containsKey(e.getPlayer().getName()) ) {
 					//They have used the command before
 					int timesClicked = playersZoomedIn.get(e.getPlayer().getName());
@@ -87,7 +87,6 @@ public class Zoom extends JavaPlugin implements Listener{
 					if (timesClicked >= 4) {
 						playersZoomedIn.remove(e.getPlayer().getName());
 						removeZoom(e.getPlayer());
-						e.setCancelled(true); //stop destroying of blocks
 						return;
 					}
 					
@@ -104,7 +103,6 @@ public class Zoom extends JavaPlugin implements Listener{
 					playersZoomedIn.put(e.getPlayer().getName(), 1);
 					zoom1(e.getPlayer());
 				}
-				e.setCancelled(true); //stop destroying of blocks
 			}
 		}	} else {e.getPlayer().sendMessage("You don't have permission!");}
 	}
