@@ -40,10 +40,19 @@ public class Zoom extends JavaPlugin implements Listener{
 		
 		// init magic item --- comp500
 		String configMagicItem = this.getConfig().getString("MagicItem");
-		if (configMagicItem.equals("telescope")){
+		Material mat = Material.getMaterial(configMagicItem.toUpperCase());
+		Boolean isTelescope = false;
+		if (!configMagicItem.equals("telescope") && mat == null){
+			isTelescope = true;
+			getLogger().log(Level.INFO, "Could not find item " + configMagicItem + ". Using Telescope instead.");
+		} else {
+			if (configMagicItem.equals("telescope")){
+				isTelescope = true;
+			}
+		}
+		if (isTelescope){
 			initTelescope();
 		} else {
-			Material mat = Material.getMaterial(configMagicItem.toUpperCase());
 			ItemStack stack = new ItemStack(mat, 1);
 			magicItem = stack;
 		}
