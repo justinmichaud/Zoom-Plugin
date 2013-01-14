@@ -1,5 +1,6 @@
 ==About
 Zoom is a simple bukkit plugin that allows you to zoom in and out when you left/right (configurable) click with a configureable object in your hand. I got the idea from hawkfalkon's wonderful plugin [[http://dev.bukkit.org/server-mods/vertigo/|vertigo]].
+comp500 added a Telescope item for it!
 
 ==What? Explain.
 This is best explained in a few images (note: this shows the max zoom level. There are others in between):
@@ -13,16 +14,27 @@ This is best explained in a few images (note: this shows the max zoom level. The
 Well, it is useful for you and your players to spy on each other, or shoot each other with arrows. It is a great addition to any pvp minecraft server.
 
 ==Permissions
-None. I didn't think they were needed, but if you want them, I will gladly add them :D
+comp added them: 
+  Zoom.*:
+    description: Gives access to all Zoom commands
+    default: true
+    children:
+      Zoom.zoom: true
+      Zoom.command: true
+  Zoom.zoom:
+    description: Allows you to zoom in.
+    default: true
+  Zoom.command:
+    description: Allows you to spawn the zoomer with a command.
+    default: op
 
 ==How to use and configure.
 Hold the magic item (that you set in the config file) and left/right click (again, based on what you set in the config file). The default is
 
 \\The configuration file has 2 values:
 
-\\Mouse_Button : Left or right, depending if you want to left or right click to zoom in. DEFAULT: left
-\\MagicItem : The item that must be in your hand to zoom in. DEFAULT: BOW
-
+\\Mouse_Button : Left or right, depending if you want to left or right click to zoom in. DEFAULT: right
+\\MagicItem : The item that must be in your hand to zoom in. DEFAULT: telescope
 
 ==Support
 I have been pretty busy lately, but if you have a problem, or find a bug, email me at jtjj222@live.ca, or pm me on the bukkit forums. My username is jtjj222. If there is a feature you really want though, why not implement it yourself and make a pull request? :D
