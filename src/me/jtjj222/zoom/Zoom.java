@@ -75,11 +75,11 @@ public class Zoom extends JavaPlugin implements Listener {
 			if(i >= 0 && i <= 12) zoomLevels.add(i);
 		}
 		
-		//Schedule checking tasks
-		getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, 10000);
-		
 		//Message
 		message = ChatColor.translateAlternateColorCodes('&', getConfig().getString("Message"));
+		
+		//Schedule checking tasks
+		getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, 10000);
 		
 		getLogger().info("Version " + getDescription().getVersion() + " enabled!");
 	}
@@ -101,6 +101,7 @@ public class Zoom extends JavaPlugin implements Listener {
 		}
 	}
 
+	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		setZoomLevel(e.getPlayer(), 0);
 	}
