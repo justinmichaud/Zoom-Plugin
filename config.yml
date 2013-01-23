@@ -1,21 +1,31 @@
 ################################
 ### Zoom - By Justin Michaud ###
-###   Default config file    ###
+###    Configuration file    ###
 ################################
 
+# The item you would use to zoom in and out. Default is SPIDER_EYE. You may use item IDs if you prefer.
+MagicItem: SPIDER_EYE
 
+# Which mouse button Zoom should use to zoom in. Default is left.
+Mouse_Button: left
 
-####################################################
-# The item that you left or right click to zoom in #
-####################################################
-MagicItem : BOW
+# Wether or not to use the other button to zoom out.
+Use_Other_Button: true
 
-###################################################################################################
-# Use the left or right mouse button? If the plugin doesn't recognise the value, it assumes right #
-###################################################################################################
-Mouse_Button : left
+# Cancel breaking blocks or interacting with things (levers, buttons...) while using the magic item.
+Cancel_Interact: true
 
+# Should the plugin zoom players out when they get damaged?
+Zoom_Out_On_Damage: true
 
-#########
-## End ##
-#########
+# Message to send to the player. Set to '' for no message. %level% is the zoom level.
+Message: '&2[Zoom] &aYour zoom level is now %level%.'
+
+# Defines the zoom levels in order.
+# The first item will always be 0 so there is no need to include it.
+# Please enter only whole numbers!
+Zoom_Levels:
+  - 3
+  - 8
+  - 10
+  - 12

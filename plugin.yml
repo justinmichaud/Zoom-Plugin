@@ -1,4 +1,12 @@
 name: Zoom
-version: 1.0
-main: me.jtjj222.zoom.Zoom
+version: 1.1
+description: Zoom in! Zoom out! Zoom all the way!
 author: jtjj222
+authors: [jtjj222, lemon42]
+main: me.jtjj222.zoom.Zoom
+database: false
+
+permissions:
+    Zoom.use:
+        description: Allows usage of Zoom
+        default: op
