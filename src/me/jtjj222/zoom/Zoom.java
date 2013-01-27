@@ -15,20 +15,22 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Zoom extends JavaPlugin implements Listener {
-	Material magicItem = Material.SPIDER_EYE;
-	boolean leftMouseButton;
-	boolean useOtherButton;
-	boolean cancelInteract;
-	boolean zoomOutOnDamage;
-	String message;
+	Material magicItem; //SPIDER_EYE
+	boolean leftMouseButton; //left, true
+	boolean useOtherButton; //true
+	boolean cancelInteract; //true
+	boolean zoomOutOnDamage; //true
+	boolean zoomOutOnItemChange; //false
+	String message; //&2[Zoom] &aYour zoom level is now %level%.
 	
 	//Has all the user-defined zoom levels
-	public List<Integer> zoomLevels = new ArrayList<Integer>();
+	public List<Integer> zoomLevels = new ArrayList<Integer>(); //[3; 8; 10; 12]
 	
 	//Stores <playername, number of times they have clicked>
 	//If they click, they zoom to the zoomLevels[click_count].
@@ -68,11 +70,20 @@ public class Zoom extends JavaPlugin implements Listener {
 		cancelInteract = getConfig().getBoolean("Cancel_Interact");
 		//Damage options
 		zoomOutOnDamage = getConfig().getBoolean("Zoom_Out_On_Damage");
+		//Item change options
+		zoomOutOnItemChange = getConfig().getBoolean("Zoom_Out_On_Item_Change");
 		//Load zoom levels
 		zoomLevels = new ArrayList<Integer>();
 		
-		for(Integer i : getConfig().getIntegerList("Zoom_Levels")) {
+		for(Integer i : getConfig().getIntegerList("Zoom_Levels"))
 			if(i >= 0 && i <= 12) zoomLevels.add(i);
+			
+		if(zoomLevels.isEmpty()) {
+			getLogger().info("Could not find any zoom valid zoom levels in the configuration. Filling with default values [3; 8; 10; 12].");
+			zoomLevels.add(3);
+			zoomLevels.add(8);
+			zoomLevels.add(10);
+			zoomLevels.add(12);
 		}
 		
 		//Message
@@ -101,11 +112,15 @@ public class Zoom extends JavaPlugin implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		setZoomLevel(e.getPlayer(), 0);
 	}
-	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onItemHeldChange(PlayerItemHeldEvent e) {
+		//Feature request: zoom out on item change
+		if(zoomOutOnItemChange) setZoomLevel(e.getPlayer(), 0);
+	}
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Action zoomInAirAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
@@ -145,18 +160,17 @@ public class Zoom extends JavaPlugin implements Listener {
 		
 		if(clicks < 0) clicks = zoomLevels.size();
 		
+		p.removePotionEffect(PotionEffectType.SLOW);
 		if(clicks == 0 || clicks > zoomLevels.size()) {
 			clicks = 0;
-			p.removePotionEffect(PotionEffectType.SLOW);
 			if(playersZoomedIn.containsKey(p.getName())) playersZoomedIn.remove(p.getName());
 		} else {
-			p.removePotionEffect(PotionEffectType.SLOW);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20000, zoomLevels.get(clicks - 1)));
 			playersZoomedIn.put(p.getName(), clicks);
 		}
 		
 		int zoomLevel = (clicks == 0 ? 0 : zoomLevels.get(clicks - 1));
 		
-		if(!message.equals("") && b) p.sendMessage(message.replace("%level%", "" + zoomLevel));
+		if(!message.equals("") && b) p.sendMessage(message.replace("%level%", "" + zoomLevel + " (" + clicks + " / " + zoomLevels.size() + ")"));
 	}
 }

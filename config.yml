@@ -18,6 +18,9 @@ Cancel_Interact: true
 # Should the plugin zoom players out when they get damaged?
 Zoom_Out_On_Damage: true
 
+# Should the plugin zoom players out when they change the item they are holding?
+Zoom_Out_On_Item_Change: false
+
 # Message to send to the player. Set to '' for no message. %level% is the zoom level.
 Message: '&2[Zoom] &aYour zoom level is now %level%.'
 
