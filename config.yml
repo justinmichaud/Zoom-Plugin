@@ -24,6 +24,9 @@ Zoom_Out_On_Item_Change: false
 # Message to send to the player. Set to '' for no message. %level% is the zoom level.
 Message: '&2[Zoom] &aYour zoom level is now %level%.'
 
+# How the plugin should display zoom level values.
+Value_Display: '%value% (%index% / %total%)'
+
 # Defines the zoom levels in order.
 # The first item will always be 0 so there is no need to include it.
 # Minimum 0, maximum 12.

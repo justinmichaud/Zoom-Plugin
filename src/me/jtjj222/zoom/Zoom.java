@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,7 @@ public class Zoom extends JavaPlugin implements Listener {
 	boolean zoomOutOnDamage; //true
 	boolean zoomOutOnItemChange; //false
 	String message; //&2[Zoom] &aYour zoom level is now %level%.
-	
+	String valueDisplay; //%value% (%index% / %total%)
 	//Has all the user-defined zoom levels
 	public List<Integer> zoomLevels = new ArrayList<Integer>(); //[3; 8; 10; 12]
 	
@@ -88,10 +89,19 @@ public class Zoom extends JavaPlugin implements Listener {
 		
 		//Message
 		message = ChatColor.translateAlternateColorCodes('&', getConfig().getString("Message"));
+		if(ChatColor.stripColor(message).trim() == "") message = "";
+		//Value display
+		valueDisplay = ChatColor.translateAlternateColorCodes('&', getConfig().getString("Value_Display"));
+		
+		if(!(valueDisplay.toLowerCase().contains("%value%") || valueDisplay.toLowerCase().contains("%index%") || valueDisplay.toLowerCase().contains("%total%"))) {
+			getLogger().info("Invalid value display string. Using default: '%value% (%index% / %total%)'");
+			valueDisplay = "%value% (%index% / %total%)";
+		}
 		
 		//Schedule checking tasks
 		getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, 10000);
 		
+		//Up and runnin'!
 		getLogger().info("Version " + getDescription().getVersion() + " enabled!");
 	}
 	@Override
@@ -106,9 +116,8 @@ public class Zoom extends JavaPlugin implements Listener {
 		if (!zoomOutOnDamage || playersZoomedIn.isEmpty()) return;
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
-			if (playersZoomedIn.containsKey(p.getName())) {
+			if (playersZoomedIn.containsKey(p.getName()) && p.getGameMode() != GameMode.CREATIVE)
 				setZoomLevel(p, 0);
-			}
 		}
 	}
 
@@ -119,7 +128,7 @@ public class Zoom extends JavaPlugin implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onItemHeldChange(PlayerItemHeldEvent e) {
 		//Feature request: zoom out on item change
-		if(zoomOutOnItemChange) setZoomLevel(e.getPlayer(), 0);
+		if(zoomOutOnItemChange && getClicks(e.getPlayer()) != 0) setZoomLevel(e.getPlayer(), 0);
 	}
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
@@ -133,7 +142,7 @@ public class Zoom extends JavaPlugin implements Listener {
 				//Zoom in!
 				if (playersZoomedIn.containsKey(e.getPlayer().getName())) {
 					//Consequent zoom
-					setZoomLevel(e.getPlayer(), playersZoomedIn.get(e.getPlayer().getName()) + 1);
+					setZoomLevel(e.getPlayer(), getClicks(e.getPlayer()) + 1);
 				} else {
 					//First zoom
 					setZoomLevel(e.getPlayer(), 1);
@@ -143,7 +152,7 @@ public class Zoom extends JavaPlugin implements Listener {
 				//Zoom out!
 				if (playersZoomedIn.containsKey(e.getPlayer().getName())) {
 					//Consequent zoom
-					setZoomLevel(e.getPlayer(), playersZoomedIn.get(e.getPlayer().getName()) - 1);
+					setZoomLevel(e.getPlayer(), getClicks(e.getPlayer()) - 1);
 				} else {
 					//Zoom back to maximum level
 					setZoomLevel(e.getPlayer(), zoomLevels.size());
@@ -152,11 +161,17 @@ public class Zoom extends JavaPlugin implements Listener {
 			}
 		}
 	}
+	Integer getClicks(Player p) {
+		if(playersZoomedIn.containsKey(p.getName())) return playersZoomedIn.get(p.getName());
+		return 0;
+	}
 	void setZoomLevel(Player p, Integer clicks) {
 		setZoomLevel(p, clicks, true);
 	}
 	void setZoomLevel(Player p, Integer clicks, boolean b) {
 		if(p == null) return;
+		
+		int initialZoom = getClicks(p);
 		
 		if(clicks < 0) clicks = zoomLevels.size();
 		
@@ -170,7 +185,7 @@ public class Zoom extends JavaPlugin implements Listener {
 		}
 		
 		int zoomLevel = (clicks == 0 ? 0 : zoomLevels.get(clicks - 1));
-		
-		if(!message.equals("") && b) p.sendMessage(message.replace("%level%", "" + zoomLevel + " (" + clicks + " / " + zoomLevels.size() + ")"));
+		String level = valueDisplay.replace("%value%", "" + zoomLevel).replace("%index%", "" + clicks).replace("%total%", "" + zoomLevels.size());
+		if(!message.equals("") && b && initialZoom != zoomLevel) p.sendMessage(message.replace("%level%", level));
 	}
 }
