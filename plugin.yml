@@ -7,6 +7,6 @@ main: me.jtjj222.zoom.Zoom
 database: false
 
 permissions:
-    Zoom.use:
+    zoom.use:
         description: Allows usage of Zoom
         default: op

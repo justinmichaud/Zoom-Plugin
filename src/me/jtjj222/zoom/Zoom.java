@@ -132,6 +132,8 @@ public class Zoom extends JavaPlugin implements Listener {
 	}
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
+		if(!e.getPlayer().hasPermission("zoom.use")) return;
+		
 		Action zoomInAirAction = leftMouseButton ? Action.LEFT_CLICK_AIR : Action.RIGHT_CLICK_AIR;
 		Action zoomInBlockAction = leftMouseButton ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK;
 		Action zoomOutAirAction = leftMouseButton ? Action.RIGHT_CLICK_AIR : Action.LEFT_CLICK_AIR;
@@ -169,8 +171,8 @@ public class Zoom extends JavaPlugin implements Listener {
 		setZoomLevel(p, clicks, true);
 	}
 	void setZoomLevel(Player p, Integer clicks, boolean b) {
-		if(p == null) return;
-		
+		if(p == null || !p.hasPermission("zoom.use")) return;
+
 		int initialZoom = getClicks(p);
 		
 		if(clicks < 0) clicks = zoomLevels.size();
